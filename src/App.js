@@ -1,7 +1,7 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback } from "react";
 import "./App.css";
 import Form from "./components/Form";
-import List from "./components/Lists";
+import Lists from "./components/Lists";
 import Deleteall from "./components/Deleteall";
 import { data } from "autoprefixer";
 
@@ -16,9 +16,7 @@ export default function App() {
 
   const [todoData, setTodoData] = useState([]);
   const [value, setValue] = useState("");
-  const [edited, setEdited] = useState(false); //수정모드인지 확인하기 위한 플래그 값
 
-  
 
   // const onChangeCheckbox = () => {
   //   const newTodoData = todoData.map((item) => ({
@@ -35,25 +33,31 @@ export default function App() {
     },
     [todoData]
   );
-  const onClickEditButton = () => {
-    setEdited(true);
-  }
-  const onChangeEditInput = (e) => {
-    setValue(e.target.value);
-  }
 
-  const onClickSubmitButton = () =>{
+  // const onChangeEditInput = (e) => {
+  //   setValue(e.target.value);
+  // }
+
+  // const onClickSubmitButton = () =>{
+  //   const newTodoData = todoData.map((data) => ({
+  //     ...data,
+  //     text : data.id === todoData.id ? setValue : data.text,
+  //   }));
+  //   setTodoData(newTodoData);
+  // };
+
+  const onClickSubmitButton = (e) =>{
+    console.log("여기는 안들어오네?");
+    e.preventDefault();
     const newTodoData = todoData.map((data) => ({
-      ...data,
-      text : data.id === todoData.id ? setValue : data.text,
+          ...data,
+          text : data.id === todoData.id ? setValue : data.value,
+        }));
+        setTodoData(newTodoData);
+  
 
-    }));
-    setTodoData(newTodoData);
-    setEdited(false);
-  };
-
-
-
+    
+  }
 
   
 
@@ -70,7 +74,6 @@ export default function App() {
   const handleSubmit = (e) => {
     // form 안에 input을 전송할 때 페이지 Reload 되는 것을 막아 줌
     e.preventDefault();
-    setEdited(false);
 
     // 새로운 할 일 데이터
     let newTodo = {
@@ -81,7 +84,7 @@ export default function App() {
 
     // 원래 있던 할 일에 새로운 할 일 더해주기
     setTodoData((prev) => [...prev, newTodo]);
-    setValue("");
+    setValue(""); // 이건 무슨의미지?
   };
   // 여기서 실제 completed 속성을 바꿔줌
 
@@ -97,9 +100,8 @@ export default function App() {
           </div>
         </div>
 
-        <List
+        <Lists
           // onClickEditButton={onClickEditButton}
-          onClickEditButton={onClickEditButton}
           onClickSubmitButton={onClickSubmitButton}
           handleClick={handleClick}
           todoData={todoData}
