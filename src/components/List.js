@@ -13,7 +13,7 @@ const List = React.memo(
     handleClick,
     editedTitle,
     handleEditChange,
-    setValue,
+    
     // onClickSubmitButton,
   }) => {
     console.log("List Component");
@@ -23,24 +23,13 @@ const List = React.memo(
     const onClickEditButton = () => {
       setEdited(true);
     };
-    const onClickSubmitButton = () => {
-      console.log("여기들어옴");
-      console.log(data.id);
-      console.log(id);
-      console.log(todoData.id);
-      console.log(setValue);
-      console.log(data.value);
-      console.log(title);
-      console.log(todoData);
-      console.log(id);
-      const newTodoData = todoData.map((data) => ({
-        ...data,
-
-        text : data,
-      }));
-      setTodoData(newTodoData);
+    const onClickSubmitButton = (id, newTitle) => {
+      setTodoData(
+        todoData.map((data) =>
+          data.id === id ? { ...data, title: newTitle } : data
+        )
+      );
       setEdited(false);
-      
     };
 
     const handleCompleteChange = (id) => {
@@ -63,33 +52,34 @@ const List = React.memo(
           snapshot.isDragging ? "bg-gray-400" : "bg-gray-100"
         } flex items-center justify-between w-full px-4 my-2 text-gray-600 bg-gray-100 border rounded`}
       >
-        <div className="flex items-center">
+        <div className="flex jutify-center items-center">
           <input
             type="checkbox"
             defaultChecked={completed}
             onChange={() => handleCompleteChange(id)}
           />
-          {edited? (
-              <input
+
+          {edited ? (
+            <input
               className="w-full px-1 py-1 mr-2 text-gray-500 appearance-none"
               value={editedTitle}
               onChange={handleEditChange}
               autoFocus
-              />
-            ) :(
+            />
+          ) : (
             <span className={completed ? "line-through" : undefined}>
               {title}
-            </span> )
-           
-          }
-        </div>
-        <div className="items-center">
-          {edited ? (
-            <button onClick={onClickSubmitButton}>👌</button>
-          ) : (
-            <button onClick={onClickEditButton}>✏</button>
+            </span>
           )}
-
+        </div>
+        <div className="flex justyfy-center items-center">
+          <div className="flex justfy-center items-center">
+            {edited ? (
+              <button onClick={onClickSubmitButton}>👌</button>
+            ) : (
+              <button onClick={onClickEditButton}>✏</button>
+            )}
+          </div>
           <button
             className="px-4 py-2 float-right"
             onClick={() => handleClick(id)}

@@ -46,17 +46,14 @@ export default function App() {
   //   setTodoData(newTodoData);
   // };
 
-  const onClickSubmitButton = (e) =>{
-    console.log("여기는 안들어오네?");
-    e.preventDefault();
-    const newTodoData = todoData.map((data) => ({
-          ...data,
-          text : data.id === todoData.id ? setValue : data.value,
-        }));
-        setTodoData(newTodoData);
+  const onClickSubmitButton = (id, newTitle) => {
+    setTodoData(
+      todoData.map((data) =>
+        data.id === id ? { ...data, title: newTitle } : data
+      )
+    );
   
-
-    
+   
   }
 
   
