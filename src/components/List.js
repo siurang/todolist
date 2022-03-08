@@ -1,4 +1,4 @@
-import { data } from "autoprefixer";
+
 import React, { useState } from "react";
 
 const List = React.memo(
@@ -11,25 +11,38 @@ const List = React.memo(
     provided,
     snapshot,
     handleClick,
-    editedTitle,
     handleEditChange,
-    
+    saveToDos,
     // onClickSubmitButton,
   }) => {
     console.log("List Component");
 
     const [edited, setEdited] = useState(false); //수정모드인지 확인하기 위한 플래그 값
+    const [editedTitle, setEditedTitle] = useState(title);
 
     const onClickEditButton = () => {
       setEdited(true);
     };
-    const onClickSubmitButton = (id, newTitle) => {
-      setTodoData(
-        todoData.map((data) =>
-          data.id === id ? { ...data, title: newTitle } : data
-        )
-      );
+
+    const onClickSubmitButton = (id) => {
+      let newTodoData = todoData.map((data) => {
+        console.log("id", id);
+        console.log("data.id", data.id);
+
+        console.log("editedTitle", editedTitle);
+
+        if (data.id === id) {
+          data.title = editedTitle;
+        }
+        return data;
+      });
+      console.log("newTodoData", newTodoData);
+      setTodoData(newTodoData);
       setEdited(false);
+    };
+
+    const handleEditingChange = (e) => {
+      setEditedTitle(e.target.value);
     };
 
     const handleCompleteChange = (id) => {
@@ -40,6 +53,7 @@ const List = React.memo(
         return data;
       });
       setTodoData(newTodoData);
+      saveToDos();
     };
 
     return (
@@ -63,7 +77,7 @@ const List = React.memo(
             <input
               className="w-full px-1 py-1 mr-2 text-gray-500 appearance-none"
               value={editedTitle}
-              onChange={handleEditChange}
+              onChange={handleEditingChange}
               autoFocus
             />
           ) : (
@@ -75,7 +89,7 @@ const List = React.memo(
         <div className="flex justyfy-center items-center">
           <div className="flex justfy-center items-center">
             {edited ? (
-              <button onClick={onClickSubmitButton}>👌</button>
+              <button onClick={() => onClickSubmitButton(id)}>👌</button>
             ) : (
               <button onClick={onClickEditButton}>✏</button>
             )}
